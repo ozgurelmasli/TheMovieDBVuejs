@@ -1,8 +1,4 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
   <router-view />
 </template>
 
@@ -14,17 +10,13 @@
   text-align: center;
   color: #2c3e50;
 }
-
-#nav {
-  padding: 30px;
+hr.solid {
+  border-top: 2px solid #bbb;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+hr.rounded {
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
