@@ -9,12 +9,21 @@ import SearchMovie from '@/views/Search.vue'
 
 import MainLayout from '../Layout/MainLayout.vue';
 
+import MovieDetailPage from '../views/MovieDetailPage.vue';
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     redirect : "/latest-movies",
     component:  MainLayout,
     children : [
+      {
+        path : '/movies/detail/:movieId',
+        name : 'MovieDetail',
+        props : true,
+        component: MovieDetailPage,
+        meta : { label  : 'Movie Detail' }
+      },
       {
         path : '/latest-movies',
         name : 'LatestMovies',

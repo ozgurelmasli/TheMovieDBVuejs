@@ -19,7 +19,7 @@ export default defineComponent ({
   components: { MovieList },
   computed:{
     ...mapGetters({
-      getMovies : 'movies'
+      getMovies : 'topRatedMovies'
     }),
     movieData(){
       console.log(this.getMovies)

@@ -33,8 +33,8 @@
       <Column field="vote_average" sortable header="Vote" />
       <Column field="vote_count" sortable header="Vote count" />
       <Column headerStyle="width: 8rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-        <template #body>
-          <Button type="button" @click="detailButtonTapped" label="Detail"></Button>
+        <template #body="{ data }">
+          <Button type="button" @click="detailButtonTapped(data.id)" label="Detail"></Button>
         </template>
       </Column>
 
@@ -77,8 +77,14 @@ export default defineComponent({
         this.$emit('loadNewPage' , nextPageIndex)
       }
     },
-    detailButtonTapped(){
-      console.log('sadad')
+    detailButtonTapped(id : string){
+      console.log(id)
+      this.$router.push({
+        name : 'MovieDetail',
+        params: {
+          movieId : id
+        }
+      })
     }
   },
 });

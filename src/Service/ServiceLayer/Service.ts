@@ -28,6 +28,7 @@ export default class Service {
       url += '&page=' + request.baseURLConfig.page
     }
     console.log(url)
+    console.log('asd')
     return  {
       url : url,
       method : request.method,

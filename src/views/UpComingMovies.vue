@@ -1,25 +1,49 @@
 <template>
-  <h1>
-    Upcoming
-  </h1>
+  <movie-list
+    v-if="movieData.movies !== null"
+    :movies="movieData.movies"
+    :title="movieData.title"
+    @loadNewPage="loadNewPage"
+  >
+  </movie-list>
 </template>
 
 
 
-<script lang="ts">
+<script>
 
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { defineComponent } from "vue";
+import MovieList from "@/components/MovieList.vue";
 
 export default defineComponent({
+  components: { MovieList },
+  computed: {
+    ...mapGetters({
+      getMovies: "upcomingMovies",
+    }),
+    movieData() {
+      return {
+        title: "Upcoming Movies",
+        movies: this.getMovies,
+      };
+    },
+  },
   methods:{
     ...mapActions({
-      getUpcomingMovies : 'getUpcomingMovies'
-    })
+      getUpcomingMovies : 'getUpcomingMovies',
+      clear: "clearPopularMovies",
+    }),
+    loadNewPage(page) {
+      this.getUpcomingMovies({
+        page: page,
+      });
+    },
   },
-  async mounted() {
-    const data = await this.getUpcomingMovies()
-    console.log(data)
+   mounted() {
+     this.getUpcomingMovies({
+       page: 1
+     })
   }
 })
 

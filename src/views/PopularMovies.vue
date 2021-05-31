@@ -1,25 +1,46 @@
 <template>
-  <h1>
-    Popular Movies
-  </h1>
+  <movie-list
+    v-if="movieData.movies !== null"
+    :movies="movieData.movies"
+    :title="movieData.title"
+    @loadNewPage="loadNewPage"
+  >
+  </movie-list>
 </template>
 
-<script lang="ts">
-
-import { mapActions } from "vuex";
+<script>
+import { mapActions, mapGetters } from "vuex";
 import { defineComponent } from "vue";
+import MovieList from "@/components/MovieList.vue";
 
 export default defineComponent({
-  methods:{
-    ...mapActions({
-      getPopularMovies : 'getPopularMovies'
-    })
+  components: { MovieList },
+  computed: {
+    ...mapGetters({
+      getMovies: "popularMovies",
+    }),
+    movieData() {
+      return {
+        title: "Popular Movies",
+        movies: this.getMovies,
+      };
+    },
   },
-  async mounted() {
-    const data = await this.getPopularMovies()
-    console.log(data)
-  }
-})
-
+  methods: {
+    ...mapActions({
+      getPopularMovies: "getPopularMovies",
+      clear: "clearPopularMovies",
+    }),
+    loadNewPage(page) {
+      this.getPopularMovies({
+        page: page,
+      });
+    },
+  },
+  mounted() {
+    this.getPopularMovies({
+      page: 1,
+    });
+  },
+});
 </script>
-
