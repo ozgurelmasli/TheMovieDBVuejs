@@ -19,16 +19,27 @@ export enum ServerImageURLs {
 
 interface ServiceBaseURLConfig {
   url : ServerURLs,
+  queryType? : ServiceQueryType,
+  utilityType? : ServiceUtilityQueriesType
+}
+
+interface ServiceQueryType {
   language : boolean,
   sorting : boolean,
-  query:boolean,
+  customQuery : boolean,
   page?:number
+
+  queryString? : string,
+  sortString? : string
 }
+interface ServiceUtilityQueriesType {
+  params : string
+  utility? : string
+}
+
+
 export interface ServiceRequest {
   baseURLConfig : ServiceBaseURLConfig,
   method : Method,
   data? : any
-
-  query? : string,
-  sort? : string
 }

@@ -1,24 +1,25 @@
 import { createStore } from "vuex";
 
 import Service from "@/Service/ServiceLayer/Service";
-import { ServerURLs ,ServerImageURLs } from "@/Service/ServiceLayer/ServiceModels";
+import { ServerImageURLs, ServerURLs } from "@/Service/ServiceLayer/ServiceModels";
 import { Movie, Movies } from "@/Models/Movies";
 
 
-export interface  State {
-  movie : null
+export interface State {
+  movie: null
   topRatedMovies: null,
-  popularMovies : null,
-  upcomingMovies : null
+  popularMovies: null,
+  upcomingMovies: null
 }
 
 export default createStore({
   state() {
     return {
+      movieDetail: null,
       movie: null,
-      topRatedMovies : null,
-      popularMovies : null,
-      upcomingMovies : null
+      topRatedMovies: null,
+      popularMovies: null,
+      upcomingMovies: null
     };
   },
   getters: {
@@ -32,131 +33,126 @@ export default createStore({
       return state.popularMovies;
     },
     upcomingMovies(state: State) {
-      return state.upcomingMovies
+      return state.upcomingMovies;
     },
-    imageUrl : () => (path : string) => {
-      return ServerImageURLs.w500.valueOf() + path
+    imageUrl: () => (path: string) => {
+      return ServerImageURLs.w500.valueOf() + path;
     }
   },
   mutations: {
-    setMovie(state , payload){
-      state.movie = payload.movie
+    setMovie(state, payload) {
+      state.movie = payload.movie;
     },
-    setTopRatedMovies(state , payload){
-      const movies : Movies = payload.movies
-      if (state.topRatedMovies !== null){
-        movies.results.forEach( (movie) => {
-          (state.topRatedMovies! as Movies).results.push(movie)
-        })
-      }else {
-        state.topRatedMovies = payload.movies
+    setTopRatedMovies(state, payload) {
+      const movies: Movies = payload.movies;
+      if (state.topRatedMovies !== null) {
+        movies.results.forEach((movie) => {
+          (state.topRatedMovies! as Movies).results.push(movie);
+        });
+      } else {
+        state.topRatedMovies = payload.movies;
       }
     },
-    clearTopRatedMovies(state){
-      state.topRatedMovies = null
+    clearTopRatedMovies(state) {
+      state.topRatedMovies = null;
     },
-    setPopularMovies(state , payload){
-      const movies : Movies = payload.movies
-      if (state.popularMovies !== null){
-        movies.results.forEach( (movie) => {
-          (state.popularMovies! as Movies).results.push(movie)
-        })
-      }else {
-        state.popularMovies = payload.movies
+    setPopularMovies(state, payload) {
+      const movies: Movies = payload.movies;
+      if (state.popularMovies !== null) {
+        movies.results.forEach((movie) => {
+          (state.popularMovies! as Movies).results.push(movie);
+        });
+      } else {
+        state.popularMovies = payload.movies;
       }
     },
-    clearPopularMovies(state){
-      state.popularMovies = null
+    clearPopularMovies(state) {
+      state.popularMovies = null;
     },
-    setUpcomingMovies(state , payload){
-      const movies : Movies = payload.movies
-      if (state.upcomingMovies !== null){
-        movies.results.forEach( (movie) => {
-          (state.upcomingMovies! as Movies).results.push(movie)
-        })
-      }else {
-        state.upcomingMovies = payload.movies
+    setUpcomingMovies(state, payload) {
+      const movies: Movies = payload.movies;
+      if (state.upcomingMovies !== null) {
+        movies.results.forEach((movie) => {
+          (state.upcomingMovies! as Movies).results.push(movie);
+        });
+      } else {
+        state.upcomingMovies = payload.movies;
       }
     },
-    clearUpcomingMovies(state){
-      state.upcomingMovies = null
+    clearUpcomingMovies(state) {
+      state.upcomingMovies = null;
     },
+    clearMovie(state) {
+      state.movie = null;
+    }
   },
   actions: {
-    clearTopRatedMovies(context){
-      context.commit('clearTopRatedMovies')
+    clearMovie(context){
+      context.commit('clearMovie')
     },
-    clearPopularMovies(context){
-      context.commit('clearPopularMovies')
+    clearTopRatedMovies(context) {
+      context.commit("clearTopRatedMovies");
     },
-    clearUpcomingMovies(context){
-      context.commit('clearUpcomingMovies')
+    clearPopularMovies(context) {
+      context.commit("clearPopularMovies");
     },
-    async getTopRatedMovies(context , payload) {
+    clearUpcomingMovies(context) {
+      context.commit("clearUpcomingMovies");
+    },
+    async getTopRatedMovies(context, payload) {
       const service = new Service();
       const response: Movies = await service.requestToServer(Movies, {
         baseURLConfig: {
           url: ServerURLs.topRatedMovies,
-          language: true,
-          sorting: false,
-          query: false,
-          page: payload.page
+          queryType:{ language : true , sorting : false , customQuery : false  , page: payload.page}
         },
-        method: "GET",
+        method: "GET"
       });
-      console.log(response)
-      context.commit('setTopRatedMovies', {
+      console.log(response);
+      context.commit("setTopRatedMovies", {
         movies: response
-      })
+      });
     },
     async getLatestMovies(context) {
       const service = new Service();
       const response: Movie = await service.requestToServer(Movie, {
         baseURLConfig: {
           url: ServerURLs.latestMovies,
-          language: false,
-          sorting: false,
-          query: false,
+          queryType:{ language : false , sorting : false , customQuery : false },
         },
-        method: "GET",
+        method: "GET"
       });
-      console.log(response)
-      context.commit('setMovie', {
+      console.log(response);
+      context.commit("setMovie", {
         movie: response
-      })
+      });
     },
-    async getPopularMovies(context , payload) {
+    async getPopularMovies(context, payload) {
       const service = new Service();
       const response: Movies = await service.requestToServer(Movies, {
         baseURLConfig: {
           url: ServerURLs.popularMovies,
-          language: false,
-          sorting: false,
-          query: false,
-          page: payload.page
+          queryType:{ language : false , sorting : false , customQuery : false , page: payload.page },
         },
-        method: "GET",
+        method: "GET"
       });
-      context.commit('setPopularMovies', {
+      context.commit("setPopularMovies", {
         movies: response
-      })
+      });
       return response;
     },
-    async getUpcomingMovies(context , payload) {
+    async getUpcomingMovies(context, payload) {
       const service = new Service();
       const response: Movies = await service.requestToServer(Movies, {
         baseURLConfig: {
           url: ServerURLs.upcomingMovies,
-          language: true,
-          sorting: false,
-          query: false,
-          page: payload.page
+          queryType:{ language : true , sorting : false , customQuery : false , page: payload.page}
         },
-        method: "GET",
+        method: "GET"
       });
-      context.commit('setUpcomingMovies', {
+      context.commit("setUpcomingMovies", {
         movies: response
-      })
+      });
       return response;
     },
     async getDiscoverMovies() {
@@ -164,27 +160,36 @@ export default createStore({
       const response: Movies = await service.requestToServer(Movies, {
         baseURLConfig: {
           url: ServerURLs.discoverMovies,
-          language: false,
-          sorting: true,
-          query: false,
+          queryType : { language : false , sorting :true , customQuery: false}
         },
-        method: "GET",
+        method: "GET"
       });
       return response;
     },
-    async search(_, data): Promise<Movies> {
+    async getMovieById(context, payload) {
+      const service = new Service();
+      const response: Movie = await service.requestToServer(Movie, {
+        baseURLConfig: {
+          url: ServerURLs.movieDetail,
+          utilityType : { params:payload.movieId }
+        },
+        method: "GET",
+      });
+      console.log(response);
+      context.commit("setMovie", {
+        movie: response
+      });
+    },
+    async search(_, payload): Promise<Movies> {
       const service = new Service();
       const response: Movies = await service.requestToServer(Movies, {
         baseURLConfig: {
           url: ServerURLs.search,
-          language: false,
-          sorting: false,
-          query: true,
+          queryType: {language : false , sorting: false , customQuery: true,queryString : payload.text}
         },
         method: "GET",
-        query: data.text,
       });
-      return response;
-    },
-  },
+      return response
+    }
+  }
 });

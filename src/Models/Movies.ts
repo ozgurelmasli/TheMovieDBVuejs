@@ -14,7 +14,7 @@ export class Movies  {
 export class Movie {
   adult?: boolean = false
   backdrop_path? : string = ""
-  genre_ids? : [number]
+  genres? : Genre[]
   id!: number
   original_language?: string = ""
   original_title?: string = ""
@@ -29,6 +29,11 @@ export class Movie {
   status?:string = ""
 
   production_companies! : ProductionCompanies[]
+}
+
+export class Genre {
+  id? :string = ""
+  name?:string = ""
 }
 
 export class ProductionCompanies {

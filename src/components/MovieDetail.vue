@@ -33,11 +33,11 @@
     <h5>Genres</h5>
     <div
       v-if="
-        typeof movie.genre_ids !== 'undefined' && movie.genre_ids.length !== 0
+        typeof movie.genres !== 'undefined' && movie.genres.length !== 0
       "
     >
-      <p v-for="item in movie.genre_ids" :key="item.valueOf()">
-        {{ item }}
+      <p v-for="item in movie.genres" :key="item.valueOf()">
+        {{ item.name }}
       </p>
     </div>
     <div v-else>
@@ -65,7 +65,31 @@
       v-model="popularity"
       :max="maxValueOfPopularity"
       :min="0"
-      :size="100"
+      :size="150"
+      readonly
+    >
+    </Knob>
+
+    <hr class="solid" />
+    <h5>Vote Average</h5>
+    <Knob
+      v-if="typeof movie.vote_average !== 'undefined'"
+      v-model="voteAverage"
+      :max="10"
+      :min="0"
+      :size="150"
+      readonly
+    >
+    </Knob>
+
+    <hr class="solid" />
+    <h5>People count</h5>
+    <Knob
+      v-if="typeof movie.vote_count !== 'undefined'"
+      v-model="voteCount"
+      :max="maxValueOfVoteCount"
+      :min="0"
+      :size="150"
       readonly
     >
     </Knob>
@@ -133,10 +157,25 @@ export default defineComponent({
         ? 0
         : this.movie.popularity;
     },
+    voteAverage(): number {
+      return typeof this.movie.vote_average === "undefined"
+        ? 0
+        : this.movie.vote_average;
+    },
+    voteCount(): number {
+      return typeof this.movie.vote_count === "undefined"
+        ? 0
+        : this.movie.vote_count;
+    },
     maxValueOfPopularity(): number {
       return typeof this.movie.popularity === "undefined"
         ? 100
-        : this.movie.popularity + 200;
+        : this.movie.popularity + 100;
+    },
+    maxValueOfVoteCount(): number {
+      return typeof this.movie.vote_count === "undefined"
+        ? 100
+        : this.movie.vote_count + 1000;
     },
     getUrl(): string {
       const imageURL =

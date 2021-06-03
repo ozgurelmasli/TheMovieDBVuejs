@@ -1,8 +1,9 @@
 <template>
   <h1>Search</h1>
-  <span class="p-input-icon-left">
+  <hr class="solid">
+  <span class="p-input-icon-left"  style="width: 70%">
     <i class="pi pi-search" />
-    <InputText type="text" v-model="searchText" placeholder="Search" />
+    <InputText type="text" v-model="searchText" placeholder="Search Movie" style="width:100%" />
   </span>
 </template>
 
