@@ -16,6 +16,8 @@ import Button from 'primevue/button';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import DataView from 'primevue/dataview';
+
 
 import 'primeflex/primeflex.css'
 import 'primeicons/primeicons.css'
@@ -37,6 +39,7 @@ app.component('movie-detail' , MovieDetail)
 app.component('Knob' , Knob)
 app.component('Button' , Button)
 app.component('DataTable' , DataTable)
+app.component('DataView',DataView)
 app.component('Column', Column)
 
 app.mount('#app')

@@ -1,44 +1,67 @@
 <template>
   <movie-detail
     v-if="movieData.movie !== null"
-    :title="movieData.title"
     :movie="movieData.movie"
+    :title="movieData.title"
   >
   </movie-detail>
-</template>
 
+  <hr class="solid">
+  <movie-list
+    v-if="similarMoviesData.movies !== null"
+    :movies="similarMoviesData.movies"
+    :title="similarMoviesData.title"
+  >
+  </movie-list>
+
+</template>
 
 <script>
 import { defineComponent } from "vue";
 import { mapActions, mapGetters } from "vuex";
+import MovieList from "@/components/MovieList";
 
 export default defineComponent({
-  props : ['movieId'],
+  components: { MovieList },
+  props: ["movieId"],
   computed: {
     ...mapGetters({
-      getMovie : 'movie'
+      getMovie: "movie",
+      getSimilarMovies: "similarMovies",
     }),
-    movieData(){
+    movieData() {
       return {
-        title:  'Movie Detail',
-        movie : this.getMovie
-      }
+        title: "Movie Detail",
+        movie: this.getMovie,
+      };
+    },
+    similarMoviesData() {
+      return {
+        title: "Similar Movies",
+        movies: this.getSimilarMovies,
+      };
     },
   },
-  methods : {
+  methods: {
     ...mapActions({
-      getMovieById : 'getMovieById',
-      clearMovie : 'clearMovie'
-    })
+      getMovieById: "getMovieById",
+      clearMovie: "clearMovie",
+      getSimilarMoviesByMovieId: "getSimilarMovies",
+    }),
   },
-  mounted() {
-    this.getMovieById({
-      movieId : this.movieId
-    })
+  watch: {
+    $route(){
+      this.getMovieById({
+        movieId: this.movieId,
+      });
+      this.getSimilarMoviesByMovieId({
+        movieId: this.movieId,
+      });
+      window.scrollTo(0,0);
+    }
   },
   unmounted() {
-    this.clearMovie()
-  }
-})
-
+    this.clearMovie();
+  },
+});
 </script>

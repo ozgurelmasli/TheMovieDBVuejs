@@ -79,7 +79,7 @@ export default defineComponent({
     },
     detailButtonTapped(id : string){
       console.log(id)
-      this.$router.push({
+      this.$router.replace({
         name : 'MovieDetail',
         params: {
           movieId : id

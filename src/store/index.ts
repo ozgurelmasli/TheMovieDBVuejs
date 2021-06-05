@@ -9,7 +9,9 @@ export interface State {
   movie: null
   topRatedMovies: null,
   popularMovies: null,
-  upcomingMovies: null
+  upcomingMovies: null,
+  searchMovies : null,
+  similarMovies : null
 }
 
 export default createStore({
@@ -19,10 +21,15 @@ export default createStore({
       movie: null,
       topRatedMovies: null,
       popularMovies: null,
-      upcomingMovies: null
+      upcomingMovies: null,
+      searchMovies : null,
+      similarMovies : null
     };
   },
   getters: {
+    similarMovies(state : State){
+      return state.similarMovies
+    },
     movie(state: State) {
       return state.movie;
     },
@@ -37,9 +44,21 @@ export default createStore({
     },
     imageUrl: () => (path: string) => {
       return ServerImageURLs.w500.valueOf() + path;
+    },
+    searchMovies(state : State) {
+      return state.searchMovies
     }
   },
   mutations: {
+    setSimilarMovies(state , payload) {
+      state.similarMovies = payload.movies
+    },
+    clearSearchingMovies(state) {
+      state.searchMovies = null;
+    },
+    setSearchMovies(state, payload) {
+      state.searchMovies = payload.movies;
+    },
     setMovie(state, payload) {
       state.movie = payload.movie;
     },
@@ -87,6 +106,9 @@ export default createStore({
     }
   },
   actions: {
+    clearSearchingMovies(context){
+      context.commit('clearSearchingMovies')
+    },
     clearMovie(context){
       context.commit('clearMovie')
     },
@@ -180,7 +202,7 @@ export default createStore({
         movie: response
       });
     },
-    async search(_, payload): Promise<Movies> {
+    async search(context, payload) {
       const service = new Service();
       const response: Movies = await service.requestToServer(Movies, {
         baseURLConfig: {
@@ -189,7 +211,23 @@ export default createStore({
         },
         method: "GET",
       });
-      return response
+      console.log(response)
+      context.commit('setSearchMovies', {
+        movies : response
+      })
+    },
+    async getSimilarMovies(context, payload){
+      const service = new Service();
+      const response : Movies = await service.requestToServer( Movies , {
+        baseURLConfig : {
+          url : ServerURLs.movieDetail,
+          utilityType:{ params : payload.movieId , utility:'/similar'}
+        },
+        method:'GET'
+      })
+      context.commit('setSimilarMovies', {
+        movies :response
+      })
     }
   }
 });
